@@ -7,17 +7,21 @@ configure({ enforceActions: "always" });
 
 class PatientStore {
   @observable patientRegistry = new Map();
-  @observable patients: IPatient[] = [];
-  @observable selectedPatient: IPatient | undefined = undefined;
+  @observable patient: IPatient | null = null;
   @observable loadingInitial = false;
-  @observable editMode = false;
   @observable submitting = false;
   @observable target = "";
 
   @computed get patientsByDate() {
-    return Array.from(this.patientRegistry.values()).sort(
+   return this.splitDate(Array.from(this.patientRegistry.values()));
+  }
+  splitDate(patients:IPatient[]){
+     const sortedPatients = patients.sort(
       (p, b) => Date.parse(p.date) - Date.parse(b.date)
     );
+    const date = sortedPatients.sort(d => Date.parse(d.date.split('T')[0]))
+   
+    return date;
   }
 
   @action loadPatients = async () => {
@@ -39,19 +43,40 @@ class PatientStore {
         })
     }
   };
-
-  @action selectPatient = (id: string) => {
-    this.selectedPatient = this.patientRegistry.get(id);
-    this.editMode = false;
+  @action clearPatient=()=>{
+    this.patient = null;
+  }
+  @action loadPatient = async (id: string) => {
+    let patient = this.getPatient(id);
+    if (patient) {
+      this.patient = patient;
+    } else {
+      this.loadingInitial = true;
+      try {
+        patient = await agent.Patients.details(id);
+        runInAction('getting patient',() => {
+          this.patient = patient;
+          this.loadingInitial = false;
+        })
+      } catch (error) {
+        runInAction('get patient error', () => {
+          this.loadingInitial = false;
+        })
+        console.log(error);
+      }
+    }
   };
+  
+  getPatient = (id:string)=>{
+    return this.patientRegistry.get(id);
+  }
 
   @action createPatient = async (patient: IPatient) => {
     this.submitting = true;
     try {
       await agent.Patients.create(patient);
       runInAction(()=>{
-        this.patientRegistry.set(patient.id, patient);
-        this.editMode = false;
+        this.patientRegistry.set(patient.id, patient); 
         this.submitting = false;
       })
       
@@ -62,10 +87,7 @@ class PatientStore {
     }
   };
 
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.selectedPatient = undefined;
-  };
+
 
   @action editPatient = async (patient: IPatient) => {
     this.submitting = true;
@@ -73,8 +95,7 @@ class PatientStore {
       await agent.Patients.update(patient);
       runInAction(()=>{
         this.patientRegistry.set(patient.id, patient);
-        this.selectedPatient = patient;
-        this.editMode = false;
+        this.patient = patient;  
         this.submitting = false;
       })
      
@@ -105,12 +126,6 @@ class PatientStore {
       console.log(error);
     }
   };
-  @action openEditForm = (id: string) => {
-    this.selectedPatient = this.patientRegistry.get(id);
-    this.editMode = true;
-  };
-  @action cancelEditMode = () => {
-    this.editMode = false;
-  };
+
 }
 export default createContext(new PatientStore());

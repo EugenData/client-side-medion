@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import './app/layout/styles.css';
 import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter} from 'react-router-dom';
+import ScrolToTop from './app/layout/ScrolToTop';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter> 
+    <ScrolToTop>
+      <App />
+    </ScrolToTop>
+  </BrowserRouter>  ,
   document.getElementById('root')
 );
 

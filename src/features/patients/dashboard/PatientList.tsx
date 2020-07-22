@@ -1,59 +1,50 @@
-import React, {useContext } from "react";
-import { Item, Button, Segment } from "semantic-ui-react";
+import React, { useContext } from "react";
+import { Item, Button, Segment, Table } from "semantic-ui-react";
 import { MeetingsList } from "./MeetingsList";
 import { observer } from "mobx-react-lite";
 import PatienStore from "../../../app/stores/PatienStore";
+import { Link } from "react-router-dom";
 
 const PatientList: React.FC = () => {
   const patientStore = useContext(PatienStore);
-  const {
-    patientsByDate,
-    openEditForm,
-    submitting,
-    deletePatient,
-    target,
-  } = patientStore;
 
-  const handleOnEdit = (patientId: string) => {
-    openEditForm(patientId);
-  };
+  const { patientsByDate, submitting, deletePatient, target } = patientStore;
 
   return (
-    <Segment clearing>
-      <Item.Group relaxed>
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Date Joined</Table.HeaderCell>
+          <Table.HeaderCell>Phone</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {patientsByDate.map((patient) => (
-          
-            <Item key={patient.id}>
-              <Item.Content>
-                <Item.Header as="a">{patient.patient_name}</Item.Header>
-                <Item.Meta>{patient.date}n</Item.Meta>
-                <Item.Description></Item.Description>
-
-                <Item.Extra >
-                  <MeetingsList meetings={patient.meetings} />
-                </Item.Extra>
-
-                <Item.Extra>
-                  <Button
-                    onClick={() => handleOnEdit(patient.id)}
-                    floated="right"
-                    content="Edit"
-                    color="blue"
-                  />
-                  <Button
-                    name={patient.id}
-                    loading={target === patient.id && submitting}
-                    onClick={(e) => deletePatient(e, patient.id)}
-                    floated="right"
-                    content="Delete"
-                    color="black"
-                  />
-                </Item.Extra>
-              </Item.Content>
-            </Item>
+          <Table.Row>
+            <Table.Cell>{patient.patient_name}</Table.Cell>
+            <Table.Cell>{patient.date}</Table.Cell>
+            <Table.Cell>
+              <Button
+                as={Link}
+                to={`/patients/${patient.id}`}
+                floated="right"
+                content="Edit"
+                color="blue"
+              />
+              <Button
+                name={patient.id}
+                loading={target === patient.id && submitting}
+                onClick={(e) => deletePatient(e, patient.id)}
+                floated="right"
+                content="Delete"
+                color="black"
+              />
+            </Table.Cell>
+          </Table.Row>
         ))}
-      </Item.Group>
-    </Segment>
+      </Table.Body>
+    </Table>
   );
 };
 export default observer(PatientList);

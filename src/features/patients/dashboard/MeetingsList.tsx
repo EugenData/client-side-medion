@@ -8,7 +8,7 @@ interface IProps {
 
 export const MeetingsList: React.FC<IProps> = ({ meetings }) => {
   return (
-    <Segment  >
+    <Segment>
       <Table basic='very' celled >
         <Table.Header>
           <Table.Row>
@@ -17,8 +17,7 @@ export const MeetingsList: React.FC<IProps> = ({ meetings }) => {
           </Table.Row>
         </Table.Header>
         {meetings.map((meeting) => (
-        
-        <Table.Body>
+        <Table.Body >
           <Table.Row>
             <Table.Cell>
               <Header as='h4' image>
@@ -27,7 +26,7 @@ export const MeetingsList: React.FC<IProps> = ({ meetings }) => {
                 </Header.Content>
               </Header>
             </Table.Cell>
-            <Table.Cell>{meeting.date}</Table.Cell>
+            <Table.Cell >{meeting.date}</Table.Cell>
           </Table.Row>
           </Table.Body>
       ))}
