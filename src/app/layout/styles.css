@@ -1,8 +1,11 @@
+
 body {
   background-color: rgb(234, 234, 234) !important;
 }
-
-.ui.secondary.top.fixed.menu {
+.homeContainer .ui.container{
+  margin-top: 0em !important;
+}
+.ui.stackable.top.fixed.menu {
   background-image: linear-gradient(
     135deg,
     rgb(24, 42, 115) 0%,
@@ -11,6 +14,49 @@ body {
   ) !important;
 }
 .header.item {
-  color: white!important;
+  color: white !important;
   font-size: 15px;
 }
+.form-control {
+  padding-left: 3em !important;
+}
+.gradient {
+  
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(
+          135deg,
+          rgb(24, 42, 115) 0%,
+          rgb(33, 138, 174) 69%,
+          rgb(32, 167, 172) 89%
+  ) !important;
+  height: 100vh;
+ 
+}
+
+.gradient .ui.menu .ui.button,
+.ui.menu a.ui.inverted.button {
+  margin-left: 0.5em;
+}
+
+.gradient h1.ui.header {
+  font-size: 4em;
+  font-weight: normal;
+}
+
+.gradient h2 {
+  font-size: 1.7em;
+  font-weight: normal;
+}
+a.header {
+ font-size: 16px !important;
+}
+.ui.top.left.pointing.dropdown {
+  color: white!important;
+  font-size: 14px!important;
+}
+.detailsImage{
+ 
+ padding: 1.5em!important;
+}
+

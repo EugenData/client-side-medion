@@ -6,7 +6,7 @@ interface IProps {
   meetings: IMeeting[];
 }
 
-export const MeetingsList: React.FC<IProps> = ({ meetings }) => {
+const MeetingsList: React.FC<IProps> = ({ meetings }) => {
   return (
     <Segment>
       <Table basic='very' celled >
@@ -34,3 +34,4 @@ export const MeetingsList: React.FC<IProps> = ({ meetings }) => {
     </Segment>
   );
 };
+export default MeetingsList;
